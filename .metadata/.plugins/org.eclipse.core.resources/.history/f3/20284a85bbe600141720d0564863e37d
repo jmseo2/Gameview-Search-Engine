@@ -8,7 +8,7 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 public class CrawlData {
 	public static void main (String [] args) {
 		CrawlConfig crawlConfig = new CrawlConfig();
-		crawlConfig.setCrawlStorageFolder("../data/crawledpages/");
+		crawlConfig.setCrawlStorageFolder("../crawledpages/");
 		System.out.println(crawlConfig.toString());
 		PageFetcher pageFetcher = new PageFetcher(crawlConfig);
 		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
