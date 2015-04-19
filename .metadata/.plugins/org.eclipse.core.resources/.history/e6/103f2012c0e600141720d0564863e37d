@@ -1,0 +1,41 @@
+package datacrawl;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class DataCrawlConfigInfo {
+	public static String [] webpageRoots;
+	public static int numberOfCrawlers;
+	public static String crawlStorageFolder;
+	public static int politenessDelay;
+	public static int maxDepthOfCrawling;
+	public static int maxPagesToFetch;
+	public static boolean includeBinaryContentInFiltering;
+	public static boolean resumableCrawling;
+	
+	static {
+		try {
+			BufferedReader in = new BufferedReader(new FileReader("crawl-config-folder.txt"));
+			String line = null;
+			while (true) {
+				line = in.readLine();
+				if (line == null)
+					break;
+				String [] tokens = line.split(" ");
+				
+				if (tokens[0].equals("webpage-roots")) {
+					
+				} else if (tokens[0].equals("number-of-crawlers")) {
+					
+				} else if (tokens[0].equals("crawl-storage-folder"))
+			}
+			in.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

@@ -19,12 +19,8 @@ public class CrawlData {
 		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
 		RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
 		try {
-			CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
-			for (String webpageRoot : DataCrawlConfigInfo.webpageRoots) {
-				controller.addSeed(webpageRoot);
-			}
+			CrawlController crawlController = new CrawlController(config, pageFetcher, robotstxtServer);
 			
-			controller.start(DataCrawler.class, DataCrawlConfigInfo.numberOfCrawlers);
 		} catch (Exception e) {
 			
 		}

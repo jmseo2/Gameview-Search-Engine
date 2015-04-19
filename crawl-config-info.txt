@@ -1,0 +1,8 @@
+webpage-roots https://google.com
+number-of-crawlers 4
+crawl-storage-folder ../data/crawledpages/
+politeness-delay 1000
+max-depth-of-crawling 10
+max-pages-to-fetch -1
+include-binary-content-in-filtering false
+resumable-crawling false
