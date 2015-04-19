@@ -32,3 +32,9 @@ user global configuration and to define the default location to store repositori
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.jdt.core 4 0 2015-04-19 11:35:25.049
+!MESSAGE Invalid ZIP archive: src/resources/log4j.properties [in gamesearch]
+
+!ENTRY org.eclipse.jdt.core 4 0 2015-04-19 11:36:04.252
+!MESSAGE Invalid ZIP archive: src/resources/log4j.properties [in gamesearch]
