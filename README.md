@@ -1,2 +1,3 @@
-# cs410_project
-CS410 Final Project
+CS410 Final Project - Joon Young Seo
+
+
