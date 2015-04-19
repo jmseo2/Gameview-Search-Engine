@@ -14,11 +14,9 @@ public class CrawlData {
 		config.setMaxPagesToFetch(DataCrawlConfigInfo.maxPagesToFetch);
 		config.setIncludeBinaryContentInCrawling(DataCrawlConfigInfo.includeBinaryContentInFiltering);
 		config.setResumableCrawling(DataCrawlConfigInfo.resumableCrawling);
-		config.setIncludeHttpsPages(true);
 		
 		PageFetcher pageFetcher = new PageFetcher(config);
 		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-		robotstxtConfig.setEnabled(false);
 		RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
 		try {
 			CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);

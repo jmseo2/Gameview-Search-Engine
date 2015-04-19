@@ -18,7 +18,6 @@ public class CrawlData {
 		
 		PageFetcher pageFetcher = new PageFetcher(config);
 		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-		robotstxtConfig.setEnabled(false);
 		RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
 		try {
 			CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);

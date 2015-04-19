@@ -1,8 +1,5 @@
 package datacrawl;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -35,8 +32,8 @@ public class DataCrawler extends WebCrawler {
 		String href = url.getURL().toLowerCase();
 		boolean shouldVisit = !BINARY_FILES_EXTENSIONS.matcher(href).matches() &&
 				startsWithAny(href, DataCrawlConfigInfo.webpageRoots);
-		//if (startsWithAny(href, DataCrawlConfigInfo.webpageRoots))
-			//System.out.println(url + " " + shouldVisit);
+		if (startsWithAny(href, DataCrawlConfigInfo.webpageRoots))
+			System.out.println(url + " " + shouldVisit);
 		return shouldVisit;
 	}
 	
@@ -60,30 +57,13 @@ public class DataCrawler extends WebCrawler {
 	    
 		if (page.getParseData() instanceof HtmlParseData) {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-			String title = htmlParseData.getTitle();
-			String text = htmlParseData.getText()
-								.trim()
-								.replaceAll("[^\\x00-\\x7F]", " ")
-								.replaceAll(" +", " ");
+			String text = htmlParseData.getText();
 			String html = htmlParseData.getHtml();
 			List<WebURL> links = htmlParseData.getOutgoingUrls();
 
 			System.out.println("Text length: " + text.length());
 			System.out.println("Html length: " + html.length());
 			System.out.println("Number of outgoing links: " + links.size());
-			
-			// save parsed crawled page into the crawl storage folder
-			String crawlStorageFolder = this.getMyController().getConfig().getCrawlStorageFolder();
-			try {
-				PrintWriter out = new PrintWriter(new FileWriter(crawlStorageFolder + "/gamespot_review" + docid + ".txt"));
-				out.println(docid);
-				out.println(url);
-				out.println(title);
-				out.println(text);
-				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 
 		Header[] responseHeaders = page.getFetchResponseHeaders();

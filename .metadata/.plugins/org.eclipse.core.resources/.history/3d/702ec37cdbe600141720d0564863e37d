@@ -62,8 +62,8 @@ public class DataCrawler extends WebCrawler {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			String title = htmlParseData.getTitle();
 			String text = htmlParseData.getText()
-								.trim()
 								.replaceAll("[^\\x00-\\x7F]", " ")
+								.trim()
 								.replaceAll(" +", " ");
 			String html = htmlParseData.getHtml();
 			List<WebURL> links = htmlParseData.getOutgoingUrls();
