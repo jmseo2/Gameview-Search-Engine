@@ -106,6 +106,7 @@ public class DataQuerier {
             Document [] bodyDocs = convertScoreDocsToDocs(bodyScoreDocs);
             return bodyDocs;
         }
+        
         return convertScoreDocsToDocs(getRetrievedScoreDocs(queryTerms, hitsPerPage));
     }
 }
