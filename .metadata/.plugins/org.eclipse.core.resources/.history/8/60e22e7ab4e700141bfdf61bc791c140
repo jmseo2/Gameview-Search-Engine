@@ -15,7 +15,7 @@ public class QueryData {
         for (Document doc : docs) {
             System.out.println(doc.get("title"));
             System.out.println(doc.get("url"));
-            System.out.println("");
+            
         }
     }
 }
