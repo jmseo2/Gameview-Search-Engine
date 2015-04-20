@@ -81,7 +81,7 @@ public class DataIndexer {
 	
 	public void indexFile(IndexWriter writer, File file) throws IOException {
 		String [] data = Utility.readWebpageTextData(file.getAbsolutePath());
-		System.out.println("[INFO] Indexing document with doc id " + data[0]);
+		System.out.println("[INFO] Indexing document with doc id" + data[0]);
 		Document doc = new Document();
 		if (data.length == fieldTypes.size()) {
 			for (int i = 0; i < fieldTypes.size(); i++) {
@@ -94,7 +94,7 @@ public class DataIndexer {
 				}
 			}
 		} else {
-			System.out.println("[ERROR] Data in wrong format... ignoring...");
+			System.out.println("[ERROR] Data in wrong format... ignoring");
 		}
 		writer.addDocument(doc);
 	}

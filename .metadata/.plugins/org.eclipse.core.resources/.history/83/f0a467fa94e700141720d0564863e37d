@@ -1,0 +1,8 @@
+package dataindex;
+
+public class QueryData {
+	public static void main (String [] args) {
+		String query = "first person shooter";
+		DataQuerier querir = new DataQuerier().setIndexDirectory("../data/index/");
+	}
+}
