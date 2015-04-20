@@ -4,7 +4,6 @@ INDEX VERSION 1.127+C:\Users\jyseo_000\Desktop\cs410_project\.metadata\.plugins\
 282802218.index
 4080154661.index
 2326370430.index
-4132624589.index
 714156685.index
 2979917013.index
 2092153357.index

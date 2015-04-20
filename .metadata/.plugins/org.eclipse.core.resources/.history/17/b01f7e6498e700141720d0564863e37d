@@ -14,8 +14,6 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.*;
 
-import util.Utility;
-
 /*
  * Core class that indexes text files located at directory directory
  */
