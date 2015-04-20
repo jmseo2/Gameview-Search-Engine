@@ -8,7 +8,9 @@ public class QueryData {
         DataQuerier querier 
             = new DataQuerier()
                 .setIndexDirectory("../data/index/")
-                .setQuery(query);
+                .setFieldType("title")
+                .setQuery(query)
+                .setup();
         Document[] docs = querier.getRetrievedDocs(10);
         for (Document doc : docs) {
             System.out.println(doc.get("title"));
