@@ -51,12 +51,16 @@ public class DataQuerier {
         return this;
     }
     
-    public DataQuerier setup() throws IOException {
-        // open index
-        File path = new File(indexDir);
-        Directory dir = FSDirectory.open(path.toPath());
-        reader = DirectoryReader.open(dir);
-        searcher = new IndexSearcher(reader);
+    public DataQuerier setup() {
+        try {
+            // open index
+            File path = new File(indexDir);
+            Directory dir = FSDirectory.open(path.toPath());
+            reader = DirectoryReader.open(dir);
+            searcher = new IndexSearcher(reader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return this;
     }
 

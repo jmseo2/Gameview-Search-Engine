@@ -70,18 +70,24 @@ public class DataIndexer {
         return this;
     }
 
-    public void indexData() throws IOException {
+    public void indexData() {
         System.out.println("[INFO] Setting up index writer configuration...");
-        System.out.println("[INFO] Indexing data located at "
+        IndexWriterConfig config = new IndexWriterConfig(analyzer);
+        try {
+            IndexWriter writer = new IndexWriter(index, config);
+            System.out.println("[INFO] Indexing data located at "
                     + dataDirectory + "...");
-        File folder = new File(dataDirectory);
-        for (File fileEntry : folder.listFiles()) {
-            if (!fileEntry.isDirectory()) {
-                indexFile(writer, fileEntry);
+            File folder = new File(dataDirectory);
+            for (File fileEntry : folder.listFiles()) {
+                if (!fileEntry.isDirectory()) {
+                    indexFile(writer, fileEntry);
+                }
             }
+            writer.close();
+            System.out.println("[INFO] Indexing done...");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        writer.close();
-        System.out.println("[INFO] Indexing done...");
     }
 
     public void indexFile(IndexWriter writer, File file) throws IOException {

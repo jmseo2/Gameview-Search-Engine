@@ -51,34 +51,46 @@ public class DataQuerier {
         return this;
     }
     
-    public DataQuerier setup() throws IOException {
-        // open index
-        File path = new File(indexDir);
-        Directory dir = FSDirectory.open(path.toPath());
-        reader = DirectoryReader.open(dir);
-        searcher = new IndexSearcher(reader);
+    public DataQuerier setup() {
+        try {
+            // open index
+            File path = new File(indexDir);
+            Directory dir = FSDirectory.open(path.toPath());
+            reader = DirectoryReader.open(dir);
+            searcher = new IndexSearcher(reader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return this;
     }
 
-    private ScoreDoc [] getRetrievedScoreDocs(Term [] terms, int hitsPerPage) throws IOException {
+    private ScoreDoc [] getRetrievedScoreDocs(Term [] terms, int hitsPerPage) {
         ScoreDoc [] scoreDocs = null;
-        BooleanQuery query = new BooleanQuery();
-        for (int i = 0; i < terms.length; i++) {
-            TermQuery tq = new TermQuery(terms[i]);
-            query.add(tq, BooleanClause.Occur.SHOULD);
-        }
+        try {
+            BooleanQuery query = new BooleanQuery();
+            for (int i = 0; i < terms.length; i++) {
+                TermQuery tq = new TermQuery(terms[i]);
+                query.add(tq, BooleanClause.Occur.SHOULD);
+            }
 
-        TopDocs tops = searcher.search(query, hitsPerPage);
-        scoreDocs = tops.scoreDocs;
+            TopDocs tops = searcher.search(query, hitsPerPage);
+            scoreDocs = tops.scoreDocs;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return scoreDocs;
     }
     
-    public Document [] convertScoreDocsToDocs(ScoreDoc [] scoreDocs) throws IOException {
+    public Document [] convertScoreDocsToDocs(ScoreDoc [] scoreDocs) {
         Document [] resDocs = new Document[scoreDocs.length];
-        for (int i = 0; i < resDocs.length; i++) {
-            int docid = scoreDocs[i].doc;
-            resDocs[i] = searcher.doc(docid);
-        }  
+        try {
+            for (int i = 0; i < resDocs.length; i++) {
+                int docid = scoreDocs[i].doc;
+                resDocs[i] = searcher.doc(docid);
+            }  
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return resDocs;
     }
     
