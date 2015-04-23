@@ -1,0 +1,11 @@
+package util;
+
+import java.io.IOException;
+
+public class UtilityTest {
+    public static void main(String [] args) {
+        String [] data = Utility.readWebpageTextData("../data/crawledpages/gamespot_review37.txt");
+        String review = Utility.getOnlyReivewText(data[3]);
+        System.out.println(review);
+    }
+}

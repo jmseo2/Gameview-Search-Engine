@@ -28,10 +28,12 @@ public class DataIndexer {
     private Analyzer analyzer;
     private IndexWriterConfig config;
     private IndexWriter writer;
+    private int counter;
 
     public DataIndexer() {
         fieldTypes = new ArrayList<String>();
         fieldNames = new ArrayList<String>();
+        counter = 0;
     }
 
     public DataIndexer createIndex(String directory) {
@@ -81,11 +83,17 @@ public class DataIndexer {
             }
         }
         writer.close();
+        System.out.println("[INFO] Total of " + counter + " documents indexed...");
         System.out.println("[INFO] Indexing done...");
     }
 
     public void indexFile(IndexWriter writer, File file) throws IOException {
         String[] data = Utility.readWebpageTextData(file.getAbsolutePath());
+        // Don't index non-review document
+        if (data[2] == null) {
+            return;
+        }
+        counter++;
         System.out.println("[INFO] Indexing document with doc id " + data[0]);
         Document doc = new Document();
         if (data.length == fieldTypes.size()) {

@@ -1,0 +1,25 @@
+package sentiment;
+
+import com.aliasi.classify.DynamicLMClassifier;
+import com.aliasi.classify.LMClassifier;
+
+public class SentimentAnalyzer {
+    private String trainDataDir;
+    private DynamicLMClassifier classifier;
+    private ArrayList<String> categories;
+    public SentimentAnalyzer() {
+        categories = new ArrayList<String>();
+    }
+    
+    public SentimentAnalyzer setTrainDataDirectory(String dir) {
+        trainDataDir = dir;
+        return this;
+    }
+    
+    public SentimentAnalysis
+    
+    public void train() {
+        classifier = DynamicLMClassifier.createNGramProcess(arg0, arg1)
+    }
+    
+}

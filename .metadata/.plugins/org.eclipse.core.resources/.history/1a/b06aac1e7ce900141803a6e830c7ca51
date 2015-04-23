@@ -1,0 +1,16 @@
+package sentiment;
+
+public class SentimentAnalyzerTest {
+    public static void main (String []args) {
+        SentimentAnalyzer analyzer 
+            = new SentimentAnalyzer()
+                .setTrainDataDirectory("../data/sentiment/data/")
+                .setNGramLength(8);
+        try {
+            analyzer.train();
+            analyzer.test();
+        } catch (Exception e) {
+            
+        }
+    }
+}

@@ -18,9 +18,11 @@ public class IndexData {
                     .createIndex("../data/index/")
                     .setAnalyzer(analyzer)
                     .setDataDirectory("../data/crawledpages/")
+                    .setup()
                     .addField("STRING_FIELD", "docid")
                     .addField("STRING_FIELD", "url")
-                    .addField("TEXT_FIELD", "title").addField("TEXT_FIELD", "body");
+                    .addField("TEXT_FIELD", "title")
+                    .addField("TEXT_FIELD", "body");
 
             indexer.indexData();
         } catch (IOException e) {

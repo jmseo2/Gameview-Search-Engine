@@ -16,8 +16,12 @@ public class Utility {
                 String line = in.readLine();
                 if (line == null)
                     break;
-                body += line;
+                line = line.trim();
+                if (line.equals(""))
+                    continue;
+                body += line + "\n";
             }
+            title = getTitle(url);
             res[0] = docid;
             res[1] = url;
             res[2] = title;
@@ -28,4 +32,48 @@ public class Utility {
         }
         return res;
     }
+    
+    /* Function that retrieves title of the text
+     * The url seems to be good enough to retrieve this info
+     * This function is required because the html title does not match with the actual
+     * title of the review
+     */
+    public static String getTitle(String url) {
+        String [] tokens = url.split("/");
+        for (int i = 0; i < tokens.length; i++) {
+            if (tokens[i].equals("reviews") && i + 1 < tokens.length) {
+                String [] tokens2 = tokens[i + 1].split("-");
+                String res = "";
+                for (String token : tokens2) {
+                    res += token + " ";
+                }
+                return res.trim();
+            }
+        }
+        return null;
+    }
+    
+    // function that only retrieves the review text
+    public static String getOnlyReivewText(String text) {
+        String [] lines = text.split("\n");
+        boolean add = false;
+        String res = "";
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i].trim();
+            if (line.equals("+1")) {
+                add = true;
+                continue;
+            }
+            
+            if (line.equals("Did you enjoy this review?Sign In to Upvote")) {
+                break;
+            }
+            
+            if (add) {
+                res += line + "\n";
+            }
+        }
+        return res;
+    }
+    
 }

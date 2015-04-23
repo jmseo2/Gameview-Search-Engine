@@ -1,0 +1,7 @@
+package sentiment;
+
+public class SentimentAnalyzerTest {
+    public static void main (String []args) {
+        
+    }
+}

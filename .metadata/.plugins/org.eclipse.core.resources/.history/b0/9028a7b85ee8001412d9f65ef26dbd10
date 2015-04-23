@@ -1,0 +1,57 @@
+package util;
+
+import java.io.*;
+
+public class Utility {
+    // returns data of webpage text file
+    public static String[] readWebpageTextData(String fileName) {
+        String[] res = new String[4];
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(fileName));
+            String docid = in.readLine();
+            String url = in.readLine();
+            String title = in.readLine();
+            String body = "";
+            while (true) {
+                String line = in.readLine();
+                if (line == null)
+                    break;
+                line = line.trim();
+                if (line.equals(""))
+                    continue;
+                body += line + "\n";
+            }
+            res[0] = docid;
+            res[1] = url;
+            res[2] = title;
+            res[3] = body;
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+    
+    // function that only retrieves the review text
+    public static String getOnlyReivewText(String text) {
+        String [] lines = text.split("\n");
+        boolean add = false;
+        String res = "";
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i].trim();
+            if (line.equals("+1")) {
+                add = true;
+                continue;
+            }
+            
+            if (line.equals("Did you enjoy this review?Sign In to Upvote")) {
+                break;
+            }
+            
+            if (add) {
+                res += line + "\n";
+            }
+        }
+        return res;
+    }
+}
