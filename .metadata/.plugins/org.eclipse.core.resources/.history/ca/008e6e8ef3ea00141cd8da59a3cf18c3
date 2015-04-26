@@ -1,0 +1,95 @@
+package sentiment;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+
+import weka.classifiers.Evaluation;
+import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.meta.FilteredClassifier;
+import weka.core.*;
+import weka.core.stemmers.SnowballStemmer;
+import weka.core.tokenizers.NGramTokenizer;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.StringToWordVector;
+
+public class SentimentAnalyzer {
+    private NaiveBayes classifier;
+    private FilteredClassifier filteredClassifier;
+    private Instances rawData;
+    private NGramTokenizer tokenizer;
+    private StringToWordVector filter;
+    private SnowballStemmer stemmer;
+    private FastVector atts;
+    public SentimentAnalyzer() throws Exception {
+        classifier = new NaiveBayes();
+        filteredClassifier = new FilteredClassifier();
+        tokenizer = new NGramTokenizer();
+        tokenizer.setDelimiters("\\W");
+        filter = new StringToWordVector();
+        stemmer = new SnowballStemmer();
+        filteredClassifier.setFilter(filter);
+        filteredClassifier.setClassifier(classifier);
+        
+        Attribute contentAtt = new Attribute("@@content@@", (FastVector) null);
+        FastVector classVal = new FastVector(2);
+        classVal.addElement("neg");
+        classVal.addElement("pos");
+        Attribute classAtt = new Attribute("@@class@@", classVal);
+        atts = new FastVector(2);
+        atts.addElement(contentAtt);
+        atts.addElement(classAtt);
+    }
+    
+    public SentimentAnalyzer setNGramMinSize(int ngram) {
+        tokenizer.setNGramMinSize(ngram);
+        return this;
+    }
+    
+    public SentimentAnalyzer setNGramMaxSize(int ngram) {
+        tokenizer.setNGramMaxSize(ngram);
+        return this;
+    }
+    
+    public SentimentAnalyzer setWordsToKeep(int newWordsToKeep) {
+        filter.setWordsToKeep(newWordsToKeep);
+        return this;
+    }
+    
+    public SentimentAnalyzer setTrainDataDirectory(String dir) throws Exception {
+        rawData = TextDirectoryToArff.createDataset(dir);
+        System.out.println(rawData.attribute(0));
+        System.out.println(rawData.attribute(1));
+        filter.setInputFormat(rawData);
+        filter.setTokenizer(tokenizer);
+        filter.setDoNotOperateOnPerClassBasis(true);
+        filter.setLowerCaseTokens(true);
+        filter.setStemmer(stemmer);
+        return this;
+    }
+    
+    private Instances toInstances(String text) {
+        Instances insts = new Instances("unlabeled", atts, 0);
+        Instance inst = new Instance(2);
+        inst.setValue(insts.attribute(0), text);
+        inst.setMissing(insts.attribute(1));
+        insts.add(inst);
+        return insts;
+    }
+    
+    public void train() throws Exception {
+        filteredClassifier.buildClassifier(rawData);
+    }
+    
+    public void test() throws Exception {
+        Evaluation eval = new Evaluation(rawData);
+        eval.crossValidateModel(filteredClassifier, rawData, 5, rawData.getRandomNumberGenerator(1));
+        System.out.println(eval.errorRate());
+    }
+    
+    public double [] probDistribution(String text) throws Exception {
+        Instances insts = toInstances(text);
+        double [] distribution = filteredClassifier.distributionForInstance(rawData.instance(1001));
+        return distribution;
+    }
+}

@@ -1,0 +1,67 @@
+package sentiment;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+
+import org.tartarus.snowball.ext.PorterStemmer;
+
+import weka.core.*;
+import weka.core.stemmers.SnowballStemmer;
+import weka.core.stemmers.Stemmer;
+import weka.core.tokenizers.NGramTokenizer;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.StringToWordVector;
+
+public class SentimentAnalyzer {
+    private Instances rawData;
+    private Instances filteredData;
+    private NGramTokenizer tokenizer;
+    private StringToWordVector filter;
+    private Stemmer stemmer;
+    public SentimentAnalyzer() throws Exception {
+        tokenizer = new NGramTokenizer();
+        tokenizer.setDelimiters("\\W");
+        filter = new StringToWordVector();
+        stemmer = new SnowballStemmer();
+    }
+    
+    public SentimentAnalyzer setNGramMinSize(int ngram) {
+        tokenizer.setNGramMinSize(ngram);
+        return this;
+    }
+    
+    public SentimentAnalyzer setNGramMaxSize(int ngram) {
+        tokenizer.setNGramMaxSize(ngram);
+        return this;
+    }
+    
+    public SentimentAnalyzer setWordsToKeep(int newWordsToKeep) {
+        filter.setWordsToKeep(newWordsToKeep);
+        return this;
+    }
+    
+    public SentimentAnalyzer setTrainingDataDir(String dir) throws Exception {
+        rawData = TextDirectoryToArff.createDataset(dir);
+        filter.setInputFormat(rawData);
+        filter.setTokenizer(tokenizer);
+        filter.setDoNotOperateOnPerClassBasis(true);
+        filter.setLowerCaseTokens(true);
+        filter.setStemmer(stemmer);
+        filter.setUseStoplist(true);
+        return this;
+    }
+    
+    public SentimentAnalyzer filterData() throws Exception {
+        filteredData = Filter.useFilter(rawData, filter);
+        return this;
+    }
+    
+    private Instance toInstance(String text) {
+        
+    }
+    
+    public void train() throws Exception {
+        
+    }
+}

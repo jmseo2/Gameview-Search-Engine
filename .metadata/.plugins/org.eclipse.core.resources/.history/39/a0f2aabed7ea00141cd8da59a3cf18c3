@@ -1,0 +1,30 @@
+package sentiment;
+
+import java.io.*;
+import weka.core.*;
+
+public class TextDirectoryToArff {
+    public static Instances createDataset(String directoryPath) throws IOException {
+        Attribute content = new Attribute("content", (FastVector) null);
+        FastVector classVal = new FastVector(2);
+        classVal.addElement("pos");
+        classVal.addElement("neg");
+        FastVector atts = new FastVector(2);
+        atts.addElement(content);
+        atts.addElement(classVal);
+        Instances data = new Instances("train", atts, 0);
+        
+        return data;
+    }
+
+    public static void main(String[] args) {
+        String dir = "../data/sentiment/txt_sentoken/";
+        try {
+            Instances dataset = TextDirectoryToArff.createDataset(dir);
+            System.out.println(dataset);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}

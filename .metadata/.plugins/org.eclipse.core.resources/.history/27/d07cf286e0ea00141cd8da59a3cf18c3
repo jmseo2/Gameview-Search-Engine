@@ -1,0 +1,22 @@
+package sentiment;
+
+import weka.core.stemmers.SnowballStemmer;
+
+public class SentimentAnalyzerTest {
+    public static void main (String []args) {
+        try {
+            /*SentimentAnalyzer analyzer 
+                = new SentimentAnalyzer()
+                    .setTrainDataDirectory("../data/sentiment/txt_sentoken/")
+                    .setNGramMaxSize(1)
+                    .setNGramMinSize(1)
+                    .setWordsToKeep(10000)
+                    .filterData();
+            //analyzer.train();
+            analyzer.test();*/
+            SnowballStemmer stemmer = new SnowballStemmer();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

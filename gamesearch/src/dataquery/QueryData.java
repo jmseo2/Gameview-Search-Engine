@@ -3,6 +3,7 @@ package dataquery;
 import java.io.IOException;
 
 import org.apache.lucene.document.Document;
+import util.Utility;
 
 public class QueryData {
     public static void main(String[] args) {
@@ -14,12 +15,12 @@ public class QueryData {
                     .setFieldType("title")
                     .setQuery(query)
                     .setup();
-            Document[] docs = querier.getRetrievedDocs(20);
+            Document[] docs = querier.getRetrievedDocs(10);
             for (Document doc : docs) {
                 System.out.println(doc.get("docid"));
                 System.out.println(doc.get("title"));
                 System.out.println(doc.get("url"));
-                System.out.println("");
+                String body = doc.get("body");
             
             }
         } catch (IOException e) {
