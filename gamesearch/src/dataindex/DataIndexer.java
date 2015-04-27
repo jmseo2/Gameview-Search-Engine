@@ -28,12 +28,18 @@ public class DataIndexer {
     private Analyzer analyzer;
     private IndexWriterConfig config;
     private IndexWriter writer;
-    private int counter;
+    private int counter, numNegBoosting, numPosBoosting;
+    private boolean isBoosting;
+    private HashSet<String> indexedTitle;
 
     public DataIndexer() {
         fieldTypes = new ArrayList<String>();
         fieldNames = new ArrayList<String>();
         counter = 0;
+        numNegBoosting = 0;
+        numPosBoosting = 0;
+        isBoosting = false;
+        indexedTitle = new HashSet<String>();
     }
 
     public DataIndexer createIndex(String directory) {
@@ -57,6 +63,11 @@ public class DataIndexer {
 
     public DataIndexer setDataDirectory(String directory) {
         dataDirectory = directory;
+        return this;
+    }
+    
+    public DataIndexer setBoosting(boolean boosting) {
+        isBoosting = boosting;
         return this;
     }
     
@@ -84,11 +95,26 @@ public class DataIndexer {
         }
         writer.close();
         System.out.println("[INFO] Total of " + counter + " documents indexed...");
+        if (isBoosting) {
+            System.out.println("[INFO] Total of " + (numNegBoosting + numPosBoosting) + " documents boosted...");
+            System.out.println("[INFO] Number of negative boosting: " + numNegBoosting);
+            System.out.println("[INFO] Number of positive boosting: " + numPosBoosting);
+        }
         System.out.println("[INFO] Indexing done...");
     }
 
     public void indexFile(IndexWriter writer, File file) throws IOException {
+        String fileName = file.getName();
+        String sentimentFileName = "../data/sentimentreview/" + fileName;
         String[] data = Utility.readWebpageTextData(file.getAbsolutePath());
+        
+        // do not index duplicate title review
+        if (indexedTitle.contains(data[2])) {
+            return;
+        }
+        indexedTitle.add(data[2]);
+        
+        double [] prob = Utility.getProb(sentimentFileName);
         // Don't index non-review document
         if (data[2] == null) {
             return;
@@ -103,12 +129,29 @@ public class DataIndexer {
                 if (fieldType.equals("STRING_FIELD")) {
                     doc.add(new StringField(fieldName, data[i], Field.Store.YES));
                 } else if (fieldType.equalsIgnoreCase("TEXT_FIELD")) {
-                    doc.add(new TextField(fieldName, data[i], Field.Store.YES));
+                    TextField tf = new TextField(fieldName, data[i], Field.Store.YES);
+                    if (isBoosting && fieldName.equals("body")) {
+                        boostField(tf, prob);
+                    }
+                    doc.add(tf);
                 }
             }
         } else {
             System.out.println("[ERROR] Data in wrong format... ignoring...");
         }
         writer.addDocument(doc);
+    }
+    
+    private void boostField (Field field, double [] prob) {
+        if (prob[0] > 0.4) {
+            field.setBoost(0.5f);
+            numNegBoosting++;
+            return;
+        }
+         
+        if (prob[1] > 0.9) {
+            field.setBoost(2.0f);
+            numPosBoosting++;
+        }
     }
 }

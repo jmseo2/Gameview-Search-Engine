@@ -81,11 +81,8 @@ analyzer.set_train_data(train)
 analyzer.extract_ngram_features(1, 1, 5000)
 analyzer.train_classifier()
 #analyzer.test_classifier()
-"""
-
 analyzer = load_object("../data/sentiment/models/sentiment.pkl")
-
 print(analyzer.probability("horrible boring disgusting"))
-
+"""
 
 

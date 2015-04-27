@@ -76,4 +76,18 @@ public class Utility {
         return res;
     }
     
+    
+    public static double [] getProb(String fileName) {
+        double [] res = new double[2];
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(fileName));
+            String [] tokens = in.readLine().split(" ");
+            res[0] = Double.parseDouble(tokens[0]);
+            res[1] = Double.parseDouble(tokens[1]);
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
 }
