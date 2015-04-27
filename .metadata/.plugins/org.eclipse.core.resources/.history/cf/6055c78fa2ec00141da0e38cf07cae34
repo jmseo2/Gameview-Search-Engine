@@ -21,6 +21,8 @@ public class QueryData {
                 System.out.println(doc.get("title"));
                 System.out.println(doc.get("url"));
                 System.out.println();
+                String body = doc.get("body");
+            
             }
         } catch (IOException e) {
             e.printStackTrace();
