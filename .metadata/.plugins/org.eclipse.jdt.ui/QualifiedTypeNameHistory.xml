@@ -35,7 +35,6 @@
 <fullyQualifiedTypeName name="com.aliasi.classify.DynamicLMClassifier"/>
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="com.aliasi.util.Files"/>
-<fullyQualifiedTypeName name="java.io.IOException"/>
 <fullyQualifiedTypeName name="com.aliasi.classify.Classified"/>
 <fullyQualifiedTypeName name="com.aliasi.classify.Classification"/>
 <fullyQualifiedTypeName name="com.aliasi.lm.NGramProcessLM"/>
@@ -44,7 +43,6 @@
 <fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="sentiment.SentimentAnalyzer"/>
 <fullyQualifiedTypeName name="util.Utility"/>
-<fullyQualifiedTypeName name="java.io.File"/>
 <fullyQualifiedTypeName name="java.util.HashSet"/>
 <fullyQualifiedTypeName name="java.util.Set"/>
 <fullyQualifiedTypeName name="weka.filters.unsupervised.attribute.StringToWordVector"/>
@@ -60,4 +58,6 @@
 <fullyQualifiedTypeName name="weka.classifiers.functions.SMO"/>
 <fullyQualifiedTypeName name="weka.classifiers.functions.Logistic"/>
 <fullyQualifiedTypeName name="weka.classifiers.functions.LibSVM"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="java.io.IOException"/>
 </qualifiedTypeNameHistroy>

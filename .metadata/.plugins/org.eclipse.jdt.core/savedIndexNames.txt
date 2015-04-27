@@ -1,5 +1,4 @@
 INDEX VERSION 1.127+C:\Users\jyseo_000\Desktop\cs410_project\.metadata\.plugins\org.eclipse.jdt.core
-1295690606.index
 2739260532.index
 2143505834.index
 282802218.index
@@ -28,10 +27,9 @@ INDEX VERSION 1.127+C:\Users\jyseo_000\Desktop\cs410_project\.metadata\.plugins\
 391899458.index
 1075704790.index
 2831514157.index
-3038224025.index
 1963854087.index
+3038224025.index
 3184316943.index
-4083136296.index
 857894498.index
 3273784186.index
 924468408.index
@@ -39,8 +37,6 @@ INDEX VERSION 1.127+C:\Users\jyseo_000\Desktop\cs410_project\.metadata\.plugins\
 1950075095.index
 2895942126.index
 747410995.index
-3726379000.index
-1962552118.index
-1906092660.index
 431412253.index
-3502351948.index
+1906092660.index
+1295690606.index

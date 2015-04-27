@@ -54,7 +54,7 @@ public class Utility {
     }
     
     // function that only retrieves the review text
-    public static String getOnlyReviewText(String text) {
+    public static String getOnlyReivewText(String text) {
         String [] lines = text.split("\n");
         boolean add = false;
         String res = "";

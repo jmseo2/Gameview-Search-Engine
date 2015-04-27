@@ -5,29 +5,36 @@ from bs4 import BeautifulSoup
 from nltk.stem.porter import *
 from nltk.corpus import stopwords
 import re
+from util import *
 
 class SentimentAnalyzer:
-    def set_train_data(self, dir):
-        self.raw_train = pd.read_csv(dir, header=0, delimiter="\t", quoting=3)
+    def set_train_data(self, train):
+        self.raw_train = train
         self.clean_train = self.clean_data(self.raw_train)
+
+    def set_test_data(self, test):
+        self.raw_test = test
+        self.clean_test = self.clean_data(self.raw_test)
 
     def clean_text(self, raw_text):
         cleaned_text = BeautifulSoup(raw_text).get_text()
         letters_only = re.sub("[^a-zA-Z]", " ", cleaned_text)
         words = letters_only.lower().split()
-        stemmer = PorterStemmer()
-        stemmed_words = [stemmer.stem(w) for w in words]
-        return (" ".join(stemmed_words))
+        #stemmer = PorterStemmer()
+        #stemmed_words = [stemmer.stem(w) for w in words]
+        return (" ".join(words))
 
-    def clean_data(self, raw_train):
-        num_reviews = raw_train["review"].size
-        clean_train_reviews = []
-        for i in range(0, num_reviews):
+    def clean_data(self, raw_data):
+        num_reviews = raw_data["review"].size
+        clean_data = []
+        i = 0
+        for text in raw_data["review"]:
             if ((i + 1) % 1000 == 0):
                 print("Review " + str(i + 1) + " of " + str(num_reviews))
-            clean_train_reviews.append(self.clean_text(raw_train["review"][i]))
+            i += 1
+            clean_data.append(self.clean_text(text))
 
-        return clean_train_reviews
+        return clean_data
 
     def extract_ngram_features(self, min_n, max_n, max_num_features):
         print("Extracting ngram features...")
@@ -43,10 +50,16 @@ class SentimentAnalyzer:
 
     def train_classifier(self):
         print ("Training classifier...")
-        self.classifier = svm.SVC()
+        self.classifier = svm.SVC(probability = True)
         self.classifier = self.classifier.fit(self.feature_vectors, self.raw_train["sentiment"])
         print(self.classifier.score(self.feature_vectors, self.raw_train["sentiment"]))
         print("Training classifier done...")
+
+    def test_classifier(self):
+        print ("Testing classifier...")
+        test_feature_vectors = self.vectorizer.transform(self.clean_test)
+        print (self.classifier.score(test_feature_vectors, self.raw_test["sentiment"]))
+        print ("Testing classifier done...")
 
     def classify(self, text):
         text_array = [self.clean_text(text)]
@@ -58,11 +71,21 @@ class SentimentAnalyzer:
         text_feature_vector = self.vectorizer.transform(text_array)[0]
         return self.classifier.predict_proba(text_feature_vector)
 
+"""
+data = pd.read_csv("../data/sentiment/labeledTrainData.tsv", header=0, delimiter="\t", quoting=3)
+train = data[:][:25000]
+#test = data[:][20000:25000]
 analyzer = SentimentAnalyzer()
-analyzer.set_train_data("../data/sentiment/labeledTrainData.tsv")
+analyzer.set_train_data(train)
+#analyzer.set_test_data(test)
 analyzer.extract_ngram_features(1, 1, 5000)
 analyzer.train_classifier()
+#analyzer.test_classifier()
+"""
 
-print(analyzer.probability("this movie was really horrible"))
+analyzer = load_object("../data/sentiment/models/sentiment.pkl")
+
+print(analyzer.probability("horrible boring disgusting"))
+
 
 
