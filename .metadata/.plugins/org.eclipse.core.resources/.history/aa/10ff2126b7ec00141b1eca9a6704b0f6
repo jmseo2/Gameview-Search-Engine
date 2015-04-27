@@ -90,7 +90,7 @@ public class DataQuerier {
                 return new Document[0];
             }
             Document [] titleDocs = convertScoreDocsToDocs(titleScoreDocs);
-            //System.out.println("[INFO] Retrieved doc's title: " + titleDocs[0].get("title"));
+            System.out.println("[INFO] Retrieved doc's title: " + titleDocs[0].get("title"));
             
             // open index
             File path = new File(indexDir);

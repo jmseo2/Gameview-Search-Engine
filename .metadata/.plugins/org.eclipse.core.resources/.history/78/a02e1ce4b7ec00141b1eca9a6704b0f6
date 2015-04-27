@@ -10,19 +10,18 @@ import util.Utility;
 
 public class QueryData {
     public static void main(String[] args) {
-        if (args.length != 4) {
-            System.out.println("Usage: java [query] [num-docs] [num-sentences] [index-directory]");
+        if (args.length != 3) {
+            System.out.println("Usage: java [query] [num-docs] [num-sentences]");
             return;
         }
         String query = args[0];
         int numDocs = Integer.parseInt(args[1]);
         int numSentences = Integer.parseInt(args[2]);
-        String indexDir = args[3];
         SimpleSummariser summarizer = new SimpleSummariser();
         try {
             DataQuerier querier 
                 = new DataQuerier()
-                    .setIndexDirectory(indexDir)
+                    .setIndexDirectory("../data/indexboosted/")
                     .setFieldType("title")
                     .setQuery(query)
                     .setup();
