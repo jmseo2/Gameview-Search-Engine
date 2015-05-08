@@ -1,11 +1,3 @@
-<?php
-
-if(isset($_GET['submit'])) {
-	$query = $_GET['query']
-	echo $query
-}
-
-?>
 <html>
 <head>
 <title>Search Box</title>
@@ -58,12 +50,14 @@ if(isset($_GET['submit'])) {
 	.tfclear{
 		clear:both;
 	}
+	.textwidth{ width: 850px;}
 </style>
+
 </head>
 <body>
 	<!-- HTML for SEARCH BAR -->
 	<div id="tfheader">
-		<form id="tfnewsearch" method="GET" action="http://www.google.com">
+		<form id="tfnewsearch" method="GET" action="">
 		        <input type="text" class="tftextinput" name="query" size="35" maxlength="120">
 		        <input type="submit" name="submit" value="search" class="tfbutton">
 		</form>
@@ -72,3 +66,23 @@ if(isset($_GET['submit'])) {
 </body>
 </html>
 
+<?php
+
+if(isset($_GET['submit'])) {
+	$query = $_GET['query'];
+	$cmd = "java -jar /home/user/Desktop/query.jar \"" . $query . "\" 20 4 /home/user/Desktop/indexboosted/ 2>&1";
+	$output = shell_exec($cmd);
+	$lines = explode("\n", $output);
+	//$output = shell_exec("java -version 2>&1");
+	$num = count($lines);
+	echo "<br></br>";
+	for ($i = 0; $i < $num; $i+=4) {
+		echo "<a href=\"" . $lines[$i + 1] . "\">" . strtoupper($lines[$i]) . "</a>";
+		echo "<br></br>";
+		echo "<p><b> Review Summary: </b></p>";
+		echo "<p class=\"textwidth\">" . $lines[$i + 2] . "</p>";
+		echo "<br></br>";
+	}
+}
+
+?>
