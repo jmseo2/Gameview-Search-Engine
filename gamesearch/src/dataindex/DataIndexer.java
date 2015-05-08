@@ -107,7 +107,7 @@ public class DataIndexer {
         String fileName = file.getName();
         String sentimentFileName = "../data/sentimentreview/" + fileName;
         String[] data = Utility.readWebpageTextData(file.getAbsolutePath());
-        
+        data[2] = data[2].trim();
         // do not index duplicate title review
         if (indexedTitle.contains(data[2])) {
             return;

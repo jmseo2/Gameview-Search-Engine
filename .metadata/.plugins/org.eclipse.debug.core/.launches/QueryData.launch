@@ -7,6 +7,6 @@
 <listEntry value="1"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="dataquery.QueryData"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="smite 20 5"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="smte 5 4 ../data/indexboosted ../data/titles/titles.txt"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="gamesearch"/>
 </launchConfiguration>

@@ -30,10 +30,8 @@
 <fullyQualifiedTypeName name="org.apache.lucene.queries.mlt.MoreLikeThis"/>
 <fullyQualifiedTypeName name="java.io.PrintWriter"/>
 <fullyQualifiedTypeName name="java.io.FileWriter"/>
-<fullyQualifiedTypeName name="net.sf.classifier4J.summariser.SimpleSummariser"/>
 <fullyQualifiedTypeName name="com.aliasi.classify.LMClassifier"/>
 <fullyQualifiedTypeName name="com.aliasi.classify.DynamicLMClassifier"/>
-<fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="com.aliasi.util.Files"/>
 <fullyQualifiedTypeName name="com.aliasi.classify.Classified"/>
 <fullyQualifiedTypeName name="com.aliasi.classify.Classification"/>
@@ -60,4 +58,6 @@
 <fullyQualifiedTypeName name="weka.classifiers.functions.LibSVM"/>
 <fullyQualifiedTypeName name="java.io.File"/>
 <fullyQualifiedTypeName name="java.io.IOException"/>
+<fullyQualifiedTypeName name="net.sf.classifier4J.summariser.SimpleSummariser"/>
+<fullyQualifiedTypeName name="java.util.List"/>
 </qualifiedTypeNameHistroy>

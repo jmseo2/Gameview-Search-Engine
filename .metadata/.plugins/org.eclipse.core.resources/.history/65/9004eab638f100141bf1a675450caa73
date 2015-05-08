@@ -1,0 +1,132 @@
+package dataquery;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.queries.mlt.MoreLikeThis;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.PhraseQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.SimpleFSDirectory;
+import org.apache.lucene.util.Version;
+
+public class DataQuerier {
+    private String fieldType;
+    private String queryStr;
+    private String indexDir;
+    private Term[] queryTerms;
+    private IndexReader reader;
+    private IndexSearcher searcher;
+    private float scoreThreshold;
+
+    public DataQuerier setIndexDirectory(String indexDirectory) {
+        indexDir = indexDirectory;
+        return this;
+    }
+
+    public DataQuerier setFieldType(String field) {
+        fieldType = field;
+        return this;
+    }
+    
+    public DataQuerier setQuery(String queryString) {
+        queryStr = queryString;
+        String[] tokens = queryStr.split(" ");
+        queryTerms = new Term[tokens.length];
+        for (int i = 0; i < tokens.length; i++) {
+            queryTerms[i] = new Term(fieldType, tokens[i]);
+        }
+        return this;
+    }
+    
+    public DataQuerier setScoreThreshold(float threshold) {
+        scoreThreshold = threshold;
+        return this;
+    }
+    
+    public DataQuerier setup() throws IOException {
+        // open index
+        File path = new File(indexDir);
+        Directory dir = FSDirectory.open(path.toPath());
+        reader = DirectoryReader.open(dir);
+        searcher = new IndexSearcher(reader);
+        return this;
+    }
+
+    private ScoreDoc [] getRetrievedScoreDocs(Term [] terms, int hitsPerPage) throws IOException {
+        ScoreDoc [] scoreDocs = null;
+        BooleanQuery query = new BooleanQuery();
+        for (int i = 0; i < terms.length; i++) {
+            TermQuery tq = new TermQuery(terms[i]);
+            query.add(tq, BooleanClause.Occur.SHOULD);
+        }
+
+        TopDocs tops = searcher.search(query, hitsPerPage);
+        scoreDocs = tops.scoreDocs;
+        return scoreDocs;
+    }
+    
+    public Document [] convertScoreDocsToDocs(ScoreDoc [] scoreDocs) throws IOException {
+        Document [] resDocs = new Document[scoreDocs.length];
+        for (int i = 0; i < resDocs.length; i++) {
+            int docid = scoreDocs[i].doc;
+            resDocs[i] = searcher.doc(docid);
+        }  
+        return resDocs;
+    }
+    
+    private ScoreDoc [] getPagesAboveThreshold(ScoreDoc [] scoreDocs) {
+        if (scoreDocs.length == 0)
+            return new ScoreDoc[0];
+        float bestScore = scoreDocs[0].score;
+        List<ScoreDoc> res = new ArrayList<ScoreDoc>();
+        for (ScoreDoc doc : scoreDocs) {
+            float relDiff = (doc.score - bestScore) / bestScore;
+            if (relDiff < scoreThreshold) {
+                res.add(doc);
+            }
+        }
+        return (ScoreDoc [])res.toArray();
+    }
+    
+    // User can search by game similarities or general search
+    public Document [] getRetrievedDocs(int hitsPerPage) throws IOException {
+        if (fieldType.equals("title")) {
+            ScoreDoc [] titleScoreDocs = getRetrievedScoreDocs(queryTerms, 1);
+            if (titleScoreDocs.length == 0) {
+                return new Document[0];
+            }
+            Document [] titleDocs = convertScoreDocsToDocs(titleScoreDocs);
+            //System.out.println("[INFO] Retrieved doc's title: " + titleDocs[0].get("title"));
+            
+            // open index
+            File path = new File(indexDir);
+            Directory dir = FSDirectory.open(path.toPath());
+            IndexReader reader = DirectoryReader.open(dir);
+            MoreLikeThis mlt = new MoreLikeThis(reader);
+            mlt.setAnalyzer(new StandardAnalyzer());
+            mlt.setFieldNames(new String [] {"title", "body"});
+            int docid = titleScoreDocs[0].doc;
+            Query query = mlt.like(docid);
+            TopDocs similarDocs = searcher.search(query, hitsPerPage);
+            ScoreDoc [] bodyScoreDocs = getPagesAboveThreshold(similarDocs.scoreDocs);
+            Document [] bodyDocs = convertScoreDocsToDocs(bodyScoreDocs);
+            return bodyDocs;
+        }
+        return convertScoreDocsToDocs(getRetrievedScoreDocs(queryTerms, hitsPerPage));
+    }
+}

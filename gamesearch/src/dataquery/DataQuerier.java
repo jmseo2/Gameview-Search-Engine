@@ -2,6 +2,7 @@ package dataquery;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.*;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -30,6 +31,7 @@ public class DataQuerier {
     private Term[] queryTerms;
     private IndexReader reader;
     private IndexSearcher searcher;
+    private float scoreThreshold;
 
     public DataQuerier setIndexDirectory(String indexDirectory) {
         indexDir = indexDirectory;
@@ -48,6 +50,11 @@ public class DataQuerier {
         for (int i = 0; i < tokens.length; i++) {
             queryTerms[i] = new Term(fieldType, tokens[i]);
         }
+        return this;
+    }
+    
+    public DataQuerier setScoreThreshold(float threshold) {
+        scoreThreshold = threshold;
         return this;
     }
     
@@ -82,6 +89,24 @@ public class DataQuerier {
         return resDocs;
     }
     
+    private ScoreDoc [] getPagesBelowThreshold(ScoreDoc [] scoreDocs) {
+        return scoreDocs;
+        /*if (scoreDocs.length == 0)
+            return new ScoreDoc[0];
+        float bestScore = scoreDocs[0].score;
+        List<ScoreDoc> res = new ArrayList<ScoreDoc>();
+        for (ScoreDoc doc : scoreDocs) {
+            float relDiff = (bestScore - doc.score) / bestScore;
+            if (relDiff < scoreThreshold) {
+                res.add(doc);
+            }
+        }
+        ScoreDoc [] res2 = new ScoreDoc[res.size()];
+        for (int i = 0; i < res2.length; i++)
+            res2[i] = res.get(i);
+        return res2;*/
+    }
+    
     // User can search by game similarities or general search
     public Document [] getRetrievedDocs(int hitsPerPage) throws IOException {
         if (fieldType.equals("title")) {
@@ -102,7 +127,7 @@ public class DataQuerier {
             int docid = titleScoreDocs[0].doc;
             Query query = mlt.like(docid);
             TopDocs similarDocs = searcher.search(query, hitsPerPage);
-            ScoreDoc [] bodyScoreDocs = similarDocs.scoreDocs;
+            ScoreDoc [] bodyScoreDocs = getPagesBelowThreshold(similarDocs.scoreDocs);
             Document [] bodyDocs = convertScoreDocsToDocs(bodyScoreDocs);
             return bodyDocs;
         }
